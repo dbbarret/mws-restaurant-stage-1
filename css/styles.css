@@ -87,8 +87,7 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
   padding-right: 0.3em;
 }
 
-
- /*#endregion Logo*/
+/*#endregion Logo*/
 
 /*#region Navigation*/
 nav {
@@ -100,17 +99,47 @@ nav {
     text-align:center;
   }
  
-  nav a {
-    margin: auto;
-    overflow: hidden;
-    color: #fff;
-    font-size: 1em;
-    font-weight: 200;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-  }
+nav a {
+  margin: auto;
+  overflow: hidden;
+  color: #fff;
+  font-size: 1em;
+  font-weight: 200;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
 
-  /*#endregion Navigation*/
+#breadcrumb {
+  padding: 10px;
+  list-style: none;
+  background-color: #eee;
+  font-size: 1em;
+}
+
+/* Display list items side by side */
+#breadcrumb li {
+    display: inline;
+}
+
+/* Add a slash symbol (/) before/behind each list item */
+#breadcrumb li+li:before {
+    padding: 8px;
+    color: black;
+    content: "/\00a0";
+}
+
+/* Add a color to all links inside the list */
+#breadcrumb li a {
+    color: #485d9b;
+    text-decoration: none;
+}
+
+/* Add a color on mouse-over */
+#breadcrumb li a:hover {
+    color: blueviolet;
+    text-decoration: underline;
+}
+/*#endregion Navigation*/
 
 /*#region Map*/
 #map {
@@ -220,9 +249,158 @@ nav {
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
+  align-self: flex-end;
 }
 
 /*#endregion Restaurant Listing*/
+
+/*#region Restaurant Container*/
+
+.rcontainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.rbox {
+  width: 100%;
+}
+
+.innerbox {
+  padding: 20px;
+}
+
+.rest-bg {
+  background-color: rgb(238, 226, 226);
+}
+.hours-bg {
+  background-color: rgb(227, 225, 231);
+}
+
+.detail {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #b4c79c;
+}
+
+#restaurant-name {
+  color: #f18200;
+  font-family: Arial,sans-serif;
+  font-size: 20pt;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+#restaurant-img {
+  max-height: 100%;
+  max-width: 100%;
+}
+
+#restaurant-address {
+  font-size: 12pt;
+  margin: 10px 0px;
+}
+
+#restaurant-cuisine {
+  background-color: #333;
+  color: #ddd;
+  font-size: 12pt;
+  font-weight: 300;
+  letter-spacing: 10px;
+  margin: 0 0 20px;
+  padding: 2px 0;
+  text-align: center;
+  text-transform: uppercase;
+  max-width: 100%;
+}
+
+#restaurant-container, 
+#reviews-container,
+#hours-container {
+  border: 0px;
+  width: 100%;
+}
+
+#restaurant-hours {
+  margin: 0 auto; 
+}
+
+#hours-container h2 {
+  color: #485d9b;
+  text-align: center;
+  margin: 15px 0 20px 0;
+  font-weight: 300;
+  text-transform: uppercase;
+}
+
+#hours-container th {
+  text-align: right;
+}
+
+/*#endregion Restaurant Container*/
+
+
+/*#region Review Container*/
+#reviews-container {
+  padding: 0;
+  width: 100%;
+}
+
+#reviews-container h2 {
+  color: #f58500;
+  font-size: 1.75em;
+  font-weight: 300;
+  letter-spacing: -1px;
+  padding-bottom: 1pt;
+}
+
+#reviews-list {
+  margin: 0;
+  padding: 0;
+}
+
+#reviews-list li {
+  background-color: #fff;
+  border: 2px solid rgb(227, 225, 231);
+  display: block;
+  list-style-type: none;
+  margin-bottom: 30px;
+  overflow: hidden;
+  padding: 20px 20px 20px;
+  width: 90%;
+}
+
+#reviews-list li p {
+  margin: 0 0 10px;
+}
+
+.review-name {
+  color: #302f2f;
+  display: inline;
+  padding-right: 20px;
+  font-weight: bold;
+}
+
+.review-date {
+  color: #666665;
+  display: inline;
+  padding-right: 20px;
+  font-style: italic;
+  font-size: smaller;
+}
+
+.review-rating {
+  color: #f58500;
+  float: right;
+}
+
+.review-comments {
+  padding-top: 10px;
+  color: black;
+}
+
+/*#endregion Review Container*/
 
 /*#region 550px+*/
 @media screen and (min-width : 550px) {
@@ -248,9 +426,23 @@ nav {
   .filter-label {
     width: 20%;
   }
+
 }
 
 /*#endregion 550px+*/
+
+/*#region 750px+*/
+@media screen and (min-width : 750px) {
+  .rbox {
+    width: 50%;
+  }
+  
+  #hours-container {
+    font-size: larger;
+  }
+}
+
+/*#endregion 750px+*/
 
 /*#region 1000px+*/
 @media screen and (min-width : 1000px) {
