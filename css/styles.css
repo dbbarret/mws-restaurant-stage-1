@@ -224,7 +224,7 @@ nav a {
   max-width: 250px;
 }
 
-#restaurants-list li h1 {
+#restaurants-list li h2 {
   color: #f18200;
   font-size: 1em;
   font-weight: bold;
@@ -353,7 +353,7 @@ nav a {
   width: 100%;
 }
 
-#reviews-container h2 {
+#reviews-container h3 {
   color: #f58500;
   font-size: 1.75em;
   font-weight: 300;
@@ -450,7 +450,7 @@ nav a {
 
 /*#endregion 750px+*/
 
-/*#region 1400px+*/
+/*#region 1400px+
 @media screen and (min-width : 1400px) {
   body{
     max-width: 1400px;
@@ -458,4 +458,4 @@ nav a {
     }
 }
 
-/*#endregion 1400px+*/
+#endregion 1400px+*/
