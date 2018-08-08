@@ -5,3 +5,4 @@ if (navigator.serviceWorker) {
         console.log('sw fail ' + error);
     })
 }
+
