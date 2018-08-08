@@ -427,7 +427,7 @@ class DBHelper {
   /**
    * Fetch all restaurants.
    */
-  static fetchRestaurants(callback, rest_num) {
+  static fetchRestaurants(callback) {
     //open the idb and create objstore if it doesn't exist
     const idbPromised = idb.open('idb-restaurants', 1, upgradeDB => {
       if (!upgradeDB.objectStoreNames.contains('restaurants-object-store')) {
@@ -446,7 +446,7 @@ class DBHelper {
       if (restaurants.length !== 0) { //we have data!
         callback(null, restaurants);
       } else {  //we don't have data - go to server
-        DBHelper.fetchRestaurantsFromServer(callback, rest_num);
+        DBHelper.fetchRestaurantsFromServer(callback);
       }
     })
       .catch(error => {
@@ -458,7 +458,7 @@ class DBHelper {
   /**
    * Fetch all restaurants.
    */
-  static fetchRestaurantsFromServer(callback, rest_num) {
+  static fetchRestaurantsFromServer(callback) {
     let fetchcall = DBHelper.DATABASE_URL;
 
     //if (rest_num) fetchcall = fetchcall + '/rest_num';

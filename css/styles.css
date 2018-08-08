@@ -25,7 +25,7 @@ ul, li {
 }
 
 a {
-	color: orange;
+	color: #a85b03;
 	text-decoration: none;
 }
 
@@ -70,12 +70,16 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
  /*#region Footer*/
  #footer {
   background-color: #444;
-  color: #aaa;
+  color: lightgrey;
   font-size: 0.55em;
   letter-spacing: 0.05em;
   padding: 15px;
   text-align: center;
   text-transform: uppercase;
+}
+
+#footer a {
+  color: white;
 }
 
  /*#endregion Footer*/
@@ -225,7 +229,7 @@ nav a {
 }
 
 #restaurants-list li h2 {
-  color: #f18200;
+  color: #a85b03;
   font-size: 1em;
   font-weight: bold;
   letter-spacing: 0;
@@ -241,7 +245,7 @@ nav a {
 }
 
 #restaurants-list li button {
-  background-color: #f18200;
+  background-color: #a85b03;
   color: #fff;
   font-size: 1em;
   padding: 8px 20px;
@@ -354,7 +358,7 @@ nav a {
 }
 
 #reviews-container h3 {
-  color: #f58500;
+  color: #a85b03;
   font-size: 1.75em;
   font-weight: 300;
   letter-spacing: -1px;
@@ -397,7 +401,7 @@ nav a {
 }
 
 .review-rating {
-  color: #f58500;
+  color: #a85b03;
   float: right;
 }
 
