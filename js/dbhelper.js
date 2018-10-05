@@ -29,6 +29,15 @@ class DBHelper {
     return `http://localhost:${port}/restaurants`;
   }
 
+  /**
+   * Reviews URL
+   */
+  static get REVIEWS_URL() {
+    const port = 1337;
+    //return `http://localhost:${port}/reviews/?restaurant_id=`;
+    return `http://localhost:${port}/reviews/`;
+  }
+
 
   /**
    * Fetch all restaurants.
@@ -98,13 +107,27 @@ class DBHelper {
     idbPromised.then(db => {
       const trans = db.transaction('restaurants-object-store', 'readwrite');
       const objStore = trans.objectStore('restaurants-object-store');
+      //console.log(json);
       json.forEach(j => {
         objStore.put(j);
-        return trans.complete;
       });
+      
+      return trans.complete;
     });
   }
 
+  /**
+   * Set is_favorite on restaurant
+   */
+  static setFavorite(restaurant_id, setAsFav) {
+    let id_num = restaurant_id.split("_");
+    DBHelper.fetchRestaurants((error, restaurants) => {
+      const restaurant = restaurants.find(r => r.id == id_num[1]);
+      restaurant.is_favorite = setAsFav;
+      DBHelper.storeRestarauntsIDB(restaurants);
+    });
+
+  }
 
   /**
    * Fetch a restaurant by its ID.
@@ -123,6 +146,209 @@ class DBHelper {
         }
       }
     });
+  }
+
+  //TODO: REVIEWS
+
+   /**
+   * Fetch all reviews.
+   */
+  static fetchReviews(id, callback) {
+    //open the idb and create objstore if it doesn't exist
+    const idbPromised = idb.open('idb-reviews', 1, upgradeDB => {
+      if (!upgradeDB.objectStoreNames.contains('reviews-object-store')) {
+        const objStore = upgradeDB.createObjectStore('reviews-object-store', {
+          keyPath: 'id', autoIncrement: true
+        });
+        objStore.createIndex('restaurant_id', 'restaurant_id', { unique: false });
+      }
+    });
+
+    //get the data from the objstore
+    idbPromised.then(db => {
+      const trans = db.transaction('reviews-object-store', 'readonly');
+      const objStore = trans.objectStore('reviews-object-store');
+      let restaurantIndex = objStore.index('restaurant_id');
+      let reviews = restaurantIndex.getAll(parseInt(id)); //need to store each review by rest_id for this to work!!
+      return reviews;
+    }).then(reviews => {
+      if (reviews.length !== 0) { //we have data!
+        callback(null, reviews);
+      } else {  //we don't have data - go to server
+        DBHelper.fetchReviewsFromServer(callback);
+      }
+    })
+      .catch(error => {
+        callback(error, null);
+      });
+
+  }
+
+  /**
+   * Fetch all reviews.
+   */
+  static fetchReviewsFromServer(callback) {
+    let fetchcall = DBHelper.REVIEWS_URL;
+
+    console.log('Calling fetchcall = ' + fetchcall);
+    fetch(fetchcall).then(resp => {
+      resp.json().then(jsonrestlist => {
+        DBHelper.storeReviewsIDB(jsonrestlist); //save to idb!!
+        callback(null, jsonrestlist);
+      });
+    }).catch(e => {
+      callback('something bad happened in fetchreviewsFromServer', null);
+    });
+
+  }
+
+
+  /**
+   * Fetch a review by its ID.
+   */
+  static fetchReviewById(id, callback) {
+    // fetch all reviews with proper error handling.
+    DBHelper.fetchReviews(id, (error, reviews) => {
+      if (error) {
+        callback(error, null);
+      } else {
+        if (reviews) { // Got the reviews
+          callback(null, reviews);
+        } else { // review does not exist in the database
+          callback('review does not exist', null);
+        }
+      }
+    });
+  }
+
+  /**
+   * Store Reviews in idb.
+   */
+  static storeReviewsIDB(json) {
+    
+    //open the idb and create objstore if it doesn't exist
+    const idbPromised = idb.open('idb-reviews', 1, upgradeDB => {
+      if (!upgradeDB.objectStoreNames.contains('reviews-object-store')) {
+        const objStore = upgradeDB.createObjectStore('reviews-object-store', {
+          keyPath: 'id', autoIncrement: true
+        });
+        objStore.createIndex('restaurant_id', 'restaurant_id', { unique: false });
+      }
+    });
+
+    idbPromised.then(db => {
+      const trans = db.transaction('reviews-object-store', 'readwrite');
+      const objStore = trans.objectStore('reviews-object-store');
+      //console.log(json);
+      json.forEach(j => {
+        objStore.put(j);
+      });
+      
+      return trans.complete;
+    });
+  }
+
+  /**
+   * Store submitted review
+   */
+  static storeSubmittedReviewIDB(rev) {
+    
+    //open the idb and create objstore if it doesn't exist
+    const idbPromised = idb.open('idb-reviews', 1, upgradeDB => {
+      if (!upgradeDB.objectStoreNames.contains('reviews-object-store')) {
+        const objStore = upgradeDB.createObjectStore('reviews-object-store', {
+          keyPath: 'id', autoIncrement: true
+        });
+        objStore.createIndex('restaurant_id', 'restaurant_id', { unique: false });
+      }
+    });
+
+    idbPromised.then(db => {
+      const trans = db.transaction('reviews-object-store', 'readwrite');
+      const objStore = trans.objectStore('reviews-object-store');
+
+      objStore.put(rev);
+      
+      return trans.complete;
+    });
+  }
+
+  
+  /**
+   * Store OFFLINE submitted review
+   */
+  static storeSubmittedReviewIDBOffline(rev) {
+    
+    //open the idb and create objstore if it doesn't exist
+    const idbPromised = idb.open('idb-reviews-temp', 1, upgradeDB => {
+      if (!upgradeDB.objectStoreNames.contains('reviews-temp-object-store')) {
+        const objStore = upgradeDB.createObjectStore('reviews-temp-object-store', {
+          keyPath: 'id', autoIncrement: true
+        });
+      }
+    });
+
+    idbPromised.then(db => {
+      const trans = db.transaction('reviews-temp-object-store', 'readwrite');
+      const objStore = trans.objectStore('reviews-temp-object-store');
+
+
+        objStore.put(rev);
+
+      
+      return trans.complete;
+    });
+  }
+
+  /**
+   * POST new review to server
+   */
+  static postReviewToServer(new_review, callback = () => null) {
+    fetch(DBHelper.REVIEWS_URL, {
+      method: 'POST',
+      cache: "no-cache",
+      body: JSON.stringify(new_review),
+      headers:{ 'Content-Type': 'application/json' }
+    })
+    .then(review => callback(null, review))
+    .catch(error => {
+      callback(error, null); 
+    });
+  }
+
+   /**
+   * Fetch all temp reviews.
+   */
+  static fetchAndPostTempReviews(callback) {
+    console.log('in fetchAndPostTempReviews');
+    //open the idb and create objstore if it doesn't exist
+    const idbPromised = idb.open('idb-reviews-temp', 1, upgradeDB => {
+      if (!upgradeDB.objectStoreNames.contains('reviews-temp-object-store')) {
+        const objStore = upgradeDB.createObjectStore('reviews-temp-object-store', {
+          keyPath: 'id', autoIncrement: true
+        });
+      }
+    });
+
+    //get the data from the objstore
+    idbPromised.then(db => {
+      const trans = db.transaction('reviews-temp-object-store', 'readwrite');
+      const objStore = trans.objectStore('reviews-temp-object-store');
+      let reviews = objStore.getAll(); 
+      objStore.clear(); 
+      return reviews;
+    }).then(reviews => {
+      if (reviews.length !== 0) { //we have data!
+        reviews.forEach(r => {
+          DBHelper.postReviewToServer(r);
+        });
+        console.log(reviews);
+      }
+    })
+      .catch(error => {
+        console.log(error);
+      });
+
   }
 
   /**

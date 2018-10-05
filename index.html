@@ -16,12 +16,15 @@
 </head>
 
 <body>
+    <div id="network-status" class="offline">
+        <h3>You are currently offline</h3>
+    </div>
     <header>
         <nav>
             <a href="/"><i class="far fa-utensils logo"></i> Restaurant Reviews</a>
         </nav>
     </header>
-
+    
 
     <main id="wrapper">
         <div class="container">
@@ -57,8 +60,9 @@
 
 
     <script type="application/javascript" charset="utf-8" src="js/idb.js"></script>
-    <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
-    <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/dbhelper.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/main.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/network_status.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAAWRCAIVpf1zMTXHVcxmy4CggOUcPno8&libraries=places&callback=initMap"></script>
 
     <footer id="footer">

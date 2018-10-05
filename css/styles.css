@@ -15,6 +15,17 @@ body {
 	position:relative;
 }
 
+.offline {
+    display: none;
+    background: rgb(187, 3, 3);
+    align-content: center;
+}
+
+.offline h3 {
+  text-align: center;
+  color: bisque;
+}
+
 ul, li {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 1em;
@@ -248,7 +259,7 @@ nav a {
   background-color: #a85b03;
   color: #fff;
   font-size: 1em;
-  padding: 8px 20px;
+  padding: 8px;
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
@@ -260,6 +271,22 @@ nav a {
 .restaurant-address {
   min-height: 60px;
   padding-top: 10px;
+}
+
+.button_container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+
+.favorited {
+  color: red;
+  font-size: 40px;
+}
+
+.not_favorited {
+  color: grey;
+  font-size: 40px;
 }
 
 /*#endregion Restaurant Listing*/
@@ -293,7 +320,7 @@ nav a {
 }
 
 #restaurant-name {
-  color: #f18200;
+  color: #a85b03;
   font-family: Arial,sans-serif;
   font-size: 20pt;
   font-weight: 500;
@@ -347,7 +374,6 @@ nav a {
 #hours-container th {
   text-align: right;
 }
-
 /*#endregion Restaurant Container*/
 
 
@@ -357,12 +383,13 @@ nav a {
   width: 100%;
 }
 
-#reviews-container h3 {
+#reviews-container h3, .submit_review {
   color: #a85b03;
   font-size: 1.75em;
   font-weight: 300;
   letter-spacing: -1px;
   padding-bottom: 1pt;
+  margin: auto;
 }
 
 #reviews-list {
@@ -410,6 +437,83 @@ nav a {
   color: black;
 }
 
+
+.review-form-container {
+  display: flex;
+  flex-wrap: wrap;
+  border: 2px solid rgb(227, 225, 231);
+  display: block;
+  margin-bottom: 30px;
+  overflow: hidden;
+  padding: 20px 20px 20px;
+  width: 90%;
+}
+
+#reviews-list-temppp li {
+  background-color: #fff;
+  border: 2px solid rgb(227, 225, 231);
+  display: block;
+  list-style-type: none;
+  margin-bottom: 30px;
+  overflow: hidden;
+  padding: 20px 20px 20px;
+  width: 90%;
+}
+.review-form-rating-select {
+  background-color: white;
+  border: 1px solid #fff;
+  font-family: Arial,sans-serif;
+  font-size: 11pt;
+  height: 35px;
+  letter-spacing: 0;
+  margin: 10px;
+  padding: 0 10px;
+  width: 200px;
+}
+
+.review-form-author {
+  background-color: white;
+  border: 1px solid #fff;
+  font-family: Arial,sans-serif;
+  font-size: 11pt;
+  height: 35px;
+  letter-spacing: 0;
+  margin: 10px;
+  padding: 0 10px;
+  width: 200px;
+}
+
+.review-form-comment {
+  background-color: white;
+  border: 1px solid #fff;
+  font-family: Arial,sans-serif;
+  font-size: 11pt;
+  height: 35px;
+  letter-spacing: 0;
+  margin: 10px;
+  padding: 0 10px;
+  max-width: 425px;
+  min-width: 100px;
+}
+
+.review-container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+
+.review-container button {
+  background-color: #a85b03;
+  color: #fff;
+  font-size: 1em;
+  padding: 8px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  display: block;
+  margin: auto;
+  border: none;
+}
 /*#endregion Review Container*/
 
 /*#region 550px+*/

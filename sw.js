@@ -1,4 +1,4 @@
-staticCacheName = 'rest-review-cache-04'
+staticCacheName = 'rest-review-cache-06'
 let resourcesToCache = [
     '/',
     '/index.html',
@@ -35,8 +35,10 @@ self.addEventListener('fetch', function(event) {
             fetch(event.request)
                 .then(function(fetchResponse) {
                     return caches.open(staticCacheName).then(function(cache) {
-                        cache.put(event.request, fetchResponse.clone());
-                        console.log("item placed in cache: " + event.request.url);
+                        if (event.request.method != "POST") {
+                            cache.put(event.request, fetchResponse.clone());
+                            console.log("item placed in cache: " + event.request.url);
+                        }
                         return fetchResponse;
                     });
             })

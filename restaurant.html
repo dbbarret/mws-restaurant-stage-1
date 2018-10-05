@@ -15,6 +15,9 @@
     </head>
 
 <body>
+    <div id="network-status" class="offline">
+        <h3>You are currently offline</h3>
+    </div>
   <header>
     <nav>
         <a href="/"><i class="far fa-utensils logo"></i> Restaurant Reviews</a>
@@ -24,6 +27,7 @@
       <li><a href="/">Home</a></li>
     </ul>
   </header>
+  
 
   <main id="wrapper">
     
@@ -54,6 +58,29 @@
         </div>
         <div class="box">
             <div class="innerbox">
+                <div class='review-form-container'>
+                    <h3 class='submit_review'>Submit a Review</h3>
+                    <form id="addReviewForm">
+                        <div class="review-container">
+                        <input type="text" placeholder="Enter your name..." id="new_author" required="true" class="review-form-author">
+                            <select class="review-form-rating-select" id="new_rating">
+                                <option value="5" selected>5 Star Rating</option>
+                                <option value="4">4 Star Rating</option>
+                                <option value="3">3 Star Rating</option>
+                                <option value="2">2 Star Rating</option>
+                                <option value="1">1 Star Rating</option>
+                            </select>
+                            <textarea placeholder="Enter your comments..." id="new_comment" rows="3" cols="40" required="true" class="review-form-comment"></textarea>
+                        </div>
+                        <div class="review-container">
+                            <button type="submit">Submit Review</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <div class="innerbox">
                 <section id="reviews-container">
                     <ul id="reviews-list"></ul>
                 </section>
@@ -73,9 +100,19 @@
     </footer>
 
   <script type="application/javascript" charset="utf-8" src="js/idb.js"></script>
-  <script type="text/javascript" src="js/dbhelper.js"></script>
-  <script type="text/javascript" src="js/restaurant_info.js"></script>
+  <script type="text/javascript" charset="utf-8" src="js/dbhelper.js"></script>
+  <script type="text/javascript" charset="utf-8" src="js/restaurant_info.js"></script>
+  <script type="text/javascript" charset="utf-8" src="js/network_status.js"></script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAAWRCAIVpf1zMTXHVcxmy4CggOUcPno8&libraries=places&callback=initMap"></script>
+  <script>
+      document.getElementById('addReviewForm')
+        .addEventListener('submit', function (e) {
+            e.preventDefault(); 
+            submitReview();
+            document.getElementById('addReviewForm').reset();
+            window.location.reload();
+        });
+  </script>
 
 </body>
 

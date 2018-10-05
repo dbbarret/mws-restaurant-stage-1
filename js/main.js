@@ -158,11 +158,61 @@ createRestaurantHTML = (restaurant) => {
   address.innerHTML = restaurant.address;
   li.append(address);
 
+ 
+  const button_container = document.createElement('div');
+  button_container.setAttribute('class', 'button_container');
+  li.append(button_container);
+  
+
   const more = document.createElement('button');
   more.innerHTML = 'View Details';
   more.onclick = function() { location.href = DBHelper.urlForRestaurant(restaurant); }
-  li.append(more)
+  button_container.append(more)
 
+  
+  const favorite = document.createElement('i');
+  favorite.setAttribute('id', `restaurant_${restaurant.id}`);
+  let heart_class;
+  
+  //need to handle bad data on is_favorite in JSON false vs "false"
+  let isfav = undefined;
+  if (restaurant.is_favorite === "true")  isfav = true;
+  if (restaurant.is_favorite === "false") isfav = false;
+  if (typeof isfav == "undefined") isfav = restaurant.is_favorite; //now it is not the text versions so set it to the bool val
+  if (isfav) {
+    heart_class = 'fas fa-heart favorited';
+    favorite.setAttribute('aria-label', `Clear favorite from ${restaurant.name} restaurant`);
+  } else {
+    heart_class = 'fas fa-heart not_favorited';
+    favorite.setAttribute('aria-label', `Set favorite on ${restaurant.name} restaurant`);
+  }
+  
+  favorite.setAttribute('class', heart_class);
+  //favorite.setAttribute('tabindex', '0');
+  favorite.setAttribute('role', 'button');
+
+  favorite.addEventListener('click', () => {
+    const restaurant_id = favorite.getAttribute('id');
+
+      const element = document.getElementById(restaurant_id);
+      const setAsFav = element.classList.contains('not_favorited');
+      element.classList.toggle('not_favorited');
+      element.classList.toggle('favorited');
+      if (setAsFav) {
+        element.setAttribute('aria-label', `Clear favorite from ${restaurant.name} restaurant`);
+      } else {
+        element.setAttribute('aria-label', `Set favorite on ${restaurant.name} restaurant`);
+      }
+    
+      DBHelper.setFavorite(restaurant_id, setAsFav);
+    
+
+    
+  });
+
+  button_container.append(favorite);
+
+ 
   return li
 }
 

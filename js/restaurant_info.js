@@ -94,23 +94,30 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 /**
  * Create all reviews HTML and add them to the webpage.
  */
-fillReviewsHTML = (reviews = self.restaurant.reviews) => {
-  const container = document.getElementById('reviews-container');
-  const title = document.createElement('h3');
-  title.innerHTML = 'Reviews';
-  container.appendChild(title);
+fillReviewsHTML = (rid = self.restaurant.id) => {
+  
+  /* TODO: fetch the reviews for this restaurant   */
+  DBHelper.fetchReviewById(rid, (error, reviews) => {
+    //console.log('reviews ' + rid + ' = ' + reviews);
+  
+    const container = document.getElementById('reviews-container');
+    const title = document.createElement('h3');
+    title.innerHTML = 'Reviews';
+    container.appendChild(title);
 
-  if (!reviews) {
-    const noReviews = document.createElement('p');
-    noReviews.innerHTML = 'No reviews yet!';
-    container.appendChild(noReviews);
-    return;
-  }
-  const ul = document.getElementById('reviews-list');
-  reviews.forEach(review => {
-    ul.appendChild(createReviewHTML(review));
+    if (!reviews) {
+      const noReviews = document.createElement('p');
+      noReviews.innerHTML = 'No reviews yet!';
+      container.appendChild(noReviews);
+      return;
+    }
+    const ul = document.getElementById('reviews-list');
+    reviews.forEach(review => {
+      ul.appendChild(createReviewHTML(review));
+    });
+    container.appendChild(ul);
+
   });
-  container.appendChild(ul);
 }
 
 /**
@@ -125,7 +132,7 @@ createReviewHTML = (review) => {
 
   const date = document.createElement('p');
   date.className = 'review-date';
-  date.innerHTML = review.date;
+  date.innerHTML = (new Date(review.createdAt)).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   li.appendChild(date);
 
   const rating = document.createElement('p');
@@ -139,6 +146,31 @@ createReviewHTML = (review) => {
   li.appendChild(comments);
 
   return li;
+}
+
+/**
+ * Create new review.
+ */
+submitReview = () => {
+
+  let new_review = 
+    {  //mimic json format http://localhost:1337/reviews
+      //id: //will this auto increment on PUT?
+      restaurant_id: self.restaurant.id,
+      name: document.getElementById('new_author').value,
+      createdAt: new Date().getTime(), //not req'd on POST params
+      updatedAt: new Date().getTime(),
+      rating: document.getElementById('new_rating').value,
+      comments: document.getElementById('new_comment').value,
+    };
+
+  if (navigator.onLine) {
+    DBHelper.postReviewToServer(new_review);
+  } else {
+    DBHelper.storeSubmittedReviewIDBOffline(new_review);
+  }
+  DBHelper.storeSubmittedReviewIDB(new_review);
+  return;  //  <<< needed?
 }
 
 /**
